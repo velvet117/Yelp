@@ -107,10 +107,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         else if indexPath.section == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchTableViewCell
-            cell.filterLabel.text = categories[indexPath.row]["name"]
+            cell.categoryLabel.text = categories[indexPath.row]["name"]
             cell.delegate = self
             
-            cell.filterSwitch.isOn = switchStates[indexPath.row] ?? false
+            cell.categorySwitch.isOn = switchStates[indexPath.row] ?? false
             
             return cell
         }

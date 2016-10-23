@@ -218,8 +218,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="filterLabel" destination="63x-Ia-9wJ" id="OxG-xK-YnG"/>
-                                            <outlet property="filterSwitch" destination="tgU-fL-9qq" id="IWB-Al-r7r"/>
+                                            <outlet property="categoryLabel" destination="63x-Ia-9wJ" id="4ds-y4-Fb1"/>
+                                            <outlet property="categorySwitch" destination="tgU-fL-9qq" id="iGA-7g-ER6"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

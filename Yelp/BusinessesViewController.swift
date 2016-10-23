@@ -25,8 +25,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
+                   // print(business.name!)
+                 //   print(business.address!)
                 }
             }
             
@@ -77,14 +77,13 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         
-        var categories = filters["categories"] as! [String]
-        
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]?, error:Error?) -> Void in
-            self.businesses = businesses
-            self.tableView.reloadData()
+        if let categories = filters["categories"] as? [String] {
+            Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]?, error:Error?) -> Void in
+                self.businesses = businesses
+                self.tableView.reloadData()
+            }
         }
     }
-
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if businesses != nil {
