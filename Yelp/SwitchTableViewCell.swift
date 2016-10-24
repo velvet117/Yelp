@@ -14,15 +14,14 @@ import UIKit
 
 class SwitchTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var categorySwitch: UISwitch!
-    
+    @IBOutlet weak var filterLabel: UILabel!
+    @IBOutlet weak var filterSwitch: UISwitch!
     weak var delegate: SwitchTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        categorySwitch.addTarget(self, action: #selector(SwitchTableViewCell.switchValueChanged), for: UIControlEvents.valueChanged)
+        filterSwitch.addTarget(self, action: #selector(SwitchTableViewCell.switchValueChanged), for: UIControlEvents.valueChanged)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -32,7 +31,7 @@ class SwitchTableViewCell: UITableViewCell {
     }
     
     func switchValueChanged() {
-        delegate?.switchCell?(switchCell: self, didChangeValue: categorySwitch.isOn)
+        delegate?.switchCell?(switchCell: self, didChangeValue: filterSwitch.isOn)
     }
 
 }

@@ -8,9 +8,12 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate {
+class BusinessesViewController: UIViewController {
     
     var businesses: [Business]!
+    var searchBar: UISearchBar!
+    var isMoreDataLoading:Bool = false
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -18,80 +21,60 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         self.setupTableView()
         self.setupSearchBar()
-        
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
-            self.businesses = businesses
-            self.tableView.reloadData()
-            if let businesses = businesses {
-                for business in businesses {
-                   // print(business.name!)
-                 //   print(business.address!)
-                }
-            }
-            
-            }
-        )
-        
-        /* Example of Yelp search with more search options specified
-         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-         self.businesses = businesses
-         
-         for business in businesses {
-         print(business.name!)
-         print(business.address!)
-         }
-         }
-         */
+        self.initialLoadRestaurants()
         
     }
     
+    func initialLoadRestaurants() {
+        Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) in
+            self.businesses = businesses
+            self.tableView.reloadData()
+            }
+        )
+    }
+    
     private func setupTableView() {
-        tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
     }
     
     private func setupSearchBar() {
-        let searchBar = UISearchBar()
+        searchBar = UISearchBar()
         searchBar.sizeToFit()
+        searchBar.delegate = self
         searchBar.placeholder = "Restaurants"
         navigationItem.titleView = searchBar
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
 
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let navigationController = segue.destination as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController
         
+        searchBar.text = ""
         filtersViewController.delegate = self
      }
+}
+
+extension BusinessesViewController: UISearchBarDelegate {
     
-    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        
-        if let categories = filters["categories"] as? [String] {
-            Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil) { (businesses: [Business]?, error:Error?) -> Void in
-                self.businesses = businesses
-                self.tableView.reloadData()
-            }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        Business.searchWithTerm(term: searchText) { (businesses:[Business]?, error: Error?) in
+            self.businesses = businesses
+            self.tableView.reloadData()
         }
     }
+}
+
+extension BusinessesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if businesses != nil {
-            return businesses!.count
-        }
-        else {
-            return 0
-        }
+        return businesses?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -101,5 +84,37 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         return cell
     }
+}
+
+extension BusinessesViewController: FiltersViewControllerDelegate {
     
+    func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        
+        let deals = filters["deals"] as? Bool
+        let distance = filters["distance"] as! YelpDistance
+        let sortBy = YelpSortMode(rawValue:filters["sortBy"] as! Int)
+        let categories = filters["categories"] as? [String]
+        
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, distance: distance, categories: categories, deals: deals) { (businesses: [Business]?, error:Error?) -> Void in
+            self.businesses = businesses
+            self.tableView.reloadData()
+        }
+    }
+}
+
+extension BusinessesViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !isMoreDataLoading {
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            if scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging {
+                
+                isMoreDataLoading = true
+                
+                initialLoadRestaurants()
+            }
+        }
+    }
 }

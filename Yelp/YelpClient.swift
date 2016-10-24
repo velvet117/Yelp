@@ -21,6 +21,25 @@ enum YelpSortMode: Int {
     case bestMatched = 0, distance, highestRated
 }
 
+enum YelpDistance: Int {
+    case auto = 0, walking = 480, close = 1600, driving = 8000, farAway = 32000
+    
+    var distanceValue: String {
+        switch self {
+        case .auto:
+            return "Auto"
+        case .walking:
+            return "0.3 miles"
+        case .close:
+            return "1 mile"
+        case .driving:
+            return "5 miles"
+        case .farAway:
+            return "20 miles"
+        }
+    }
+}
+
 class YelpClient: BDBOAuth1RequestOperationManager {
     var accessToken: String!
     var accessSecret: String!
@@ -44,10 +63,10 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     }
     
     func searchWithTerm(_ term: String, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
-        return searchWithTerm(term, sort: nil, categories: nil, deals: nil, completion: completion)
+        return searchWithTerm(term, sort: nil, distance: nil, categories: nil, deals: nil, completion: completion)
     }
     
-    func searchWithTerm(_ term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+    func searchWithTerm(_ term: String, sort: YelpSortMode?, distance: YelpDistance?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
         // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
         
         // Default the location to San Francisco
@@ -55,6 +74,10 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         
         if sort != nil {
             parameters["sort"] = sort!.rawValue as AnyObject?
+        }
+        
+        if distance != nil {
+            parameters["radius_filter"] = distance!.rawValue as AnyObject?
         }
         
         if categories != nil && categories!.count > 0 {
