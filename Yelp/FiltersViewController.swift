@@ -27,10 +27,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     @IBOutlet weak var tableView: UITableView!
     
-    let tableStructure: [[FiltersIdentifier]] = [[.Deal], [.Distance], [.SortBy], [.Category]]
-    var filtersValues: [FiltersIdentifier: Bool] = [:]
-    
-    let sortBy = ["Best Match", "Distance", "Highest Rated"]
+    let sortBy:[YelpSortMode] = [.bestMatched, .distance, .highestRated]
     var sortBySelected:Int = 0
     
     let distances:[YelpDistance] = [.auto, .walking, .close, .driving, .farAway]
@@ -85,15 +82,21 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         categories = YelpCategories.yelpCategories
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "TableViewHeaderView")
-        tableView.allowsMultipleSelection = true
+        self.setupTableView()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "TableViewHeaderView")
+        tableView.allowsMultipleSelection = true
+        
+        tableView.backgroundView?.backgroundColor = UIColor.white
     }
     
     //MARK: TableView Data Source method
@@ -141,7 +144,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         else if indexPath.section == 2 {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "expandedCell", for: indexPath) as! ExpandedTableViewCell
-            cell.expandedLabel.text = sortBy[indexPath.row]
+            cell.expandedLabel.text = sortBy[indexPath.row].sortValue
             
             return cell
         }
@@ -209,8 +212,5 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         else {
             switchStates[indexPath!.row] = value
         }
-        
     }
-
-    
 }

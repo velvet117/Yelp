@@ -13,6 +13,7 @@ class BusinessesViewController: UIViewController {
     var businesses: [Business]!
     var searchBar: UISearchBar!
     var isMoreDataLoading:Bool = false
+    var loadOffset: Int?
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,6 +28,7 @@ class BusinessesViewController: UIViewController {
     
     func initialLoadRestaurants() {
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) in
+            self.isMoreDataLoading = false
             self.businesses = businesses
             self.tableView.reloadData()
             }
@@ -112,6 +114,11 @@ extension BusinessesViewController: UIScrollViewDelegate {
             if scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging {
                 
                 isMoreDataLoading = true
+                if loadOffset == nil {
+                    loadOffset = 0
+                }
+                
+                loadOffset! += businesses.count
                 
                 initialLoadRestaurants()
             }
