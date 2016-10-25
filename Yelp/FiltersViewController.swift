@@ -177,6 +177,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        tableView.backgroundColor = UIColor.yellow
         if indexPath.section == 1 {
             self.selectedDistance = indexPath.row
         }

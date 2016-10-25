@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import AASquaresLoading
 
 class BusinessesViewController: UIViewController {
     
     var businesses: [Business]!
     var searchBar: UISearchBar!
+    var refreshControl: UIRefreshControl!
+    var needsRefresh: Bool = false
     var isMoreDataLoading:Bool = false
     var loadOffset: Int?
     
@@ -23,7 +26,23 @@ class BusinessesViewController: UIViewController {
         self.setupTableView()
         self.setupSearchBar()
         self.initialLoadRestaurants()
+        self.showLoading(stopTime:2.0)
+        self.setupRefreshControl()
         
+        self.needsRefresh = true
+    }
+    
+    private func showLoading(stopTime: TimeInterval) {
+        self.view.squareLoading.start(0.0)
+        self.view.squareLoading.setSquareSize(60)
+        self.view.squareLoading.color = UIColor.red
+        self.view.squareLoading.stop(stopTime)
+    }
+    
+    private func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: #selector(BusinessesViewController.initialLoadRestaurants), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl!, at: 0)
     }
     
     func initialLoadRestaurants() {
@@ -48,10 +67,6 @@ class BusinessesViewController: UIViewController {
         searchBar.placeholder = "Restaurants"
         navigationItem.titleView = searchBar
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -60,7 +75,7 @@ class BusinessesViewController: UIViewController {
         
         searchBar.text = ""
         filtersViewController.delegate = self
-     }
+    }
 }
 
 extension BusinessesViewController: UISearchBarDelegate {

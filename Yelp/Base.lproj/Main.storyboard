@@ -165,7 +165,9 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tgU-fL-9qq"/>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tgU-fL-9qq">
+                                                    <color key="onTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                </switch>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="tgU-fL-9qq" firstAttribute="centerY" secondItem="6gh-Vs-pcR" secondAttribute="centerY" id="apt-Gn-ZMu"/>
@@ -194,7 +196,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZkS-Vu-zAH">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZkS-Vu-zAH">
+                                                    <frame key="frameInset" width="1000" height="1000"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="33" id="IiV-27-pcc"/>
                                                         <constraint firstAttribute="width" constant="33" id="W3I-jP-qbB"/>

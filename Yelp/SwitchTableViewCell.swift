@@ -22,6 +22,7 @@ class SwitchTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         filterSwitch.addTarget(self, action: #selector(SwitchTableViewCell.switchValueChanged), for: UIControlEvents.valueChanged)
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

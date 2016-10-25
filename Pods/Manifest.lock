@@ -1,4 +1,5 @@
 PODS:
+  - AASquaresLoading (1.0.0)
   - AFNetworking (2.6.3):
     - AFNetworking/NSURLConnection (= 2.6.3)
     - AFNetworking/NSURLSession (= 2.6.3)
@@ -23,15 +24,20 @@ PODS:
   - BDBOAuth1Manager (1.6.0):
     - AFNetworking/NSURLConnection (~> 2.6.0)
     - AFNetworking/NSURLSession (~> 2.6.0)
+  - RoundedSwitch (2.0.0)
 
 DEPENDENCIES:
+  - AASquaresLoading
   - AFNetworking (~> 2.5)
   - BDBOAuth1Manager
+  - RoundedSwitch
 
 SPEC CHECKSUMS:
+  AASquaresLoading: 4039c25b61835d6f7c73d2d3382d6960a6039fa5
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   BDBOAuth1Manager: cd5a5872f355ca38180d52ca2dd844f0b0c84797
+  RoundedSwitch: f73f33f4d310432b776bcbd58123ad64206465cf
 
-PODFILE CHECKSUM: e93d023552e6cb9e3bc0b66e42e1d29f24efef97
+PODFILE CHECKSUM: 8cc49bfc3dfdf188f68477d51b809db4b404cdcc
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1
